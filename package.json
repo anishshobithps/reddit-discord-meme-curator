@@ -1,0 +1,16 @@
+{
+  "name": "new-folder",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.17.0",
+    "cron": "^4.4.0"
+  }
+}
