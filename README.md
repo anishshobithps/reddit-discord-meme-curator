@@ -21,12 +21,14 @@
 ## Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/anishshobithps/reddit-discord-meme-curator.git
    cd reddit-discord-meme-curator
    ```
 
 2. **Install dependencies**
+
    ```bash
    bun install
    ```
@@ -34,14 +36,17 @@
 3. **Set up environment variables**
 
    Create a `.env` file in the root directory:
+
    ```env
    DB_URL=libsql://your-database-url.turso.io
    DB_TOKEN=your-turso-auth-token
    DISCORD_WEB_URL=https://discord.com/api/webhooks/your/webhook/url
    ```
+
 ## Usage
 
 ### Run Once
+
 ```bash
 bun run index.ts
 ```
@@ -70,12 +75,12 @@ Adjust quality multipliers for each subreddit:
 
 ```typescript
 const SUBREDDIT_WEIGHTS = {
-  memes: 1.1,           // 10% boost
-  dankmemes: 1.2,       // 20% boost
-  wholesomememes: 1.0,  // No change
-  desimemes: 1.5,       // 50% boost
-  indiameme: 1.5,       // 50% boost
-  funny: 0.9,           // 10% penalty
+  memes: 1.1, // 10% boost
+  dankmemes: 1.2, // 20% boost
+  wholesomememes: 1.0, // No change
+  desimemes: 1.5, // 50% boost
+  indiameme: 1.5, // 50% boost
+  funny: 0.9, // 10% penalty
   // Add moore to remove
 };
 ```
@@ -83,11 +88,11 @@ const SUBREDDIT_WEIGHTS = {
 ### Cron Schedule Examples
 
 ```typescript
-"*/30 * * * *"  // Every 30 minutes
-"0 * * * *"     // Every hour
-"0 */2 * * *"   // Every 2 hours
-"0 9-17 * * *"  // Every hour from 9 AM to 5 PM
-"0 12 * * *"    // Once a day at noon
+"*/30 * * * *"; // Every 30 minutes
+"0 * * * *"; // Every hour
+"0 */2 * * *"; // Every 2 hours
+"0 9-17 * * *"; // Every hour from 9 AM to 5 PM
+"0 12 * * *"; // Once a day at noon
 ```
 
 [Crontab Guru](https://crontab.guru/) for help with cron expressions.
@@ -95,17 +100,21 @@ const SUBREDDIT_WEIGHTS = {
 ## How It Works
 
 ### 1. Fetch Phase
+
 - Queries top posts from configured subreddits (past 24 hours)
 - Fetches up to 50 posts per subreddit concurrently
 
 ### 2. Filter Phase
+
 - Removes NSFW content, videos, and non-images
 - Checks against posted history (prevents duplicates)
 - Filters crossposts if original was already posted
 - Validates minimum upvotes and upvote ratio
 
 ### 3. Score Phase
+
 Each post is scored based on:
+
 - **Upvotes** (logarithmic scaling, 0-300 pts)
 - **Upvote Ratio** (0-50 pts)
 - **Engagement** (comment/upvote ratio, 0-30 pts)
@@ -115,11 +124,13 @@ Each post is scored based on:
 - **24h Usage Penalty** (10% per post from same sub in 24h)
 
 ### 4. Selection Phase
+
 - Top 5 candidates are identified
 - Random selection from top 5 for variety
 - Rotation penalties ensure diversity
 
 ### 5. Post Phase
+
 - Sends embed to Discord webhook
 - Stores post ID and subreddit in database
 - Logs success/failure
@@ -164,6 +175,7 @@ The bot outputs detailed logs:
 ```
 
 ### Health Status
+
 - **Healthy**: Database connected, posted within 2 hours
 - **Degraded**: Posted within 2-6 hours
 - **Unhealthy**: No post in 6+ hours or DB connection failed
@@ -171,34 +183,40 @@ The bot outputs detailed logs:
 ## Troubleshooting
 
 ### Bot not posting anything
+
 1. Check Discord webhook URL is correct
 2. Verify database connection (check `DB_URL` and `DB_TOKEN`)
 3. Lower `MIN_UPVOTES` threshold temporarily
 4. Check logs for "No valid candidates found"
 
 ### Only posting from 1-2 subreddits
+
 1. Increase `ROTATION_LOOKBACK_POSTS` (try 5-6)
 2. Check if other subreddits have valid posts that meet criteria
 3. Adjust subreddit weights to boost underrepresented ones
 4. Lower `MIN_UPVOTES` if subreddits have lower activity
 
 ### Posts repeating
+
 1. Verify database is persisting (check Turso dashboard)
 2. Ensure `posted_memes` table is being populated
 3. Check for duplicate post IDs in database
 
 ### Rate limiting errors
+
 1. Increase `REQUEST_TIMEOUT_MS` (default: 10,000)
 2. Add delays between requests if needed
 3. Reddit generally allows reasonable scraping of public data
 
 ### Cron job not running
+
 1. Verify cron syntax with [Crontab Guru](https://crontab.guru/)
 2. Check timezone is correct (default: Asia/Kolkata)
 
 ## Development
 
 ### Project Structure
+
 ```
 reddit-discord-meme-curator/
 ├── index.ts              # Main bot code
@@ -210,6 +228,7 @@ reddit-discord-meme-curator/
 ```
 
 ### Running Tests
+
 ```bash
 # Dry run without posting
 # Comment out sendToDiscord() and run:
@@ -217,6 +236,7 @@ bun run index.ts
 ```
 
 ### Adding New Subreddits
+
 1. Add to `CONFIG.SUBREDDITS` array
 2. Add weight to `SUBREDDIT_WEIGHTS` object
 3. Restart bot
@@ -224,6 +244,7 @@ bun run index.ts
 ## Contributing
 
 Contributions welcome! Please:
+
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
@@ -231,7 +252,7 @@ Contributions welcome! Please:
 
 ## License
 
-MIT License - feel free to use this for your own meme curation needs!
+[MIT License](./LICENSE) - feel free to use this for your own meme curation needs!
 
 ## Acknowledgments
 
@@ -243,6 +264,7 @@ MIT License - feel free to use this for your own meme curation needs!
 ## Support
 
 For issues or questions:
+
 - Open an issue on GitHub
 - Check existing issues for solutions
 - Review logs for error messages
