@@ -57,7 +57,7 @@ const CONFIG = {
   MIN_UPVOTES: 100,             // Minimum upvotes required
   MIN_UPVOTE_RATIO: 0.7,        // Minimum ratio (0.0 - 1.0)
   MAX_TITLE_LENGTH: 200,        // Max title length in Discord
-  CRON_SCHEDULE: "*/1 * * * *", // Every minute (adjust as needed)
+  CRON_SCHEDULE: "*/15 * * * *", // Every 15 minute (adjust as needed, we suggest to keep minimum of 15 minutes to avoid spam and not hit API limits)
   ROTATION_ENABLED: true,       // Enable subreddit rotation
   ROTATION_LOOKBACK_POSTS: 3,   // Avoid last N subreddits
   CLEANUP_DAYS: 30,             // Delete DB entries older than N days
