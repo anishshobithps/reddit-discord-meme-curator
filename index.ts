@@ -199,10 +199,10 @@ async function safeFetch(
 }
 
 async function fetchPosts(): Promise<RedditPost[]> {
-  const urls = CONFIG.SUBREDDITS.map(
-    (s) =>
-      `https://www.reddit.com/r/${s}/top.json?t=day&limit=${CONFIG.FETCH_LIMIT}`,
-  );
+    const urls = CONFIG.SUBREDDITS.map(
+        (s) =>
+            `https://api.reddit.com/r/${s}/top.json?t=day&limit=${CONFIG.FETCH_LIMIT}`,
+    );
 
   const responses = await Promise.allSettled(urls.map((url) => safeFetch(url)));
 
