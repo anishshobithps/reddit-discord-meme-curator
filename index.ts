@@ -564,6 +564,9 @@ process.on("SIGINT", async () => {
             `🔄 Rotation: ${CONFIG.ROTATION_ENABLED ? "ENABLED" : "DISABLED"} (lookback: ${CONFIG.ROTATION_LOOKBACK_POSTS} posts)\n`,
         );
 
+        // Initial run immediately on startup
+        await run();
+
         // Then schedule
         const job = new CronJob(
             CONFIG.CRON_SCHEDULE,
