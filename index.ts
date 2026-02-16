@@ -184,7 +184,12 @@ async function safeFetch(
       },
     });
 
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) {
+            const text = await res.text();
+            console.error("Reddit error:", res.status, text);
+            throw new Error(`HTTP ${res.status}`);
+        }
+
     return res;
   } catch (err) {
     if (attempt < CONFIG.MAX_RETRIES) {
