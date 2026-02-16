@@ -24,7 +24,7 @@ const CONFIG = {
   MAX_TITLE_LENGTH: 200,
   MIN_UPVOTE_RATIO: 0.7,
   WEBHOOK_URL: process.env.DISCORD_WEB_URL ?? "",
-  CRON_SCHEDULE: "*/15 * * * *",
+  CRON_SCHEDULE: "0 * * * *",
   REQUEST_TIMEOUT_MS: 10_000,
   MAX_RETRIES: 2,
   MAX_TOP_CANDIDATES: 5,
@@ -558,9 +558,6 @@ process.on("SIGINT", async () => {
     console.log(
       `🔄 Rotation: ${CONFIG.ROTATION_ENABLED ? "ENABLED" : "DISABLED"} (lookback: ${CONFIG.ROTATION_LOOKBACK_POSTS} posts)\n`,
     );
-
-    // Run immediately on startup
-    await run();
 
     // Then schedule
     const job = new CronJob(
